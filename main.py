@@ -2,7 +2,7 @@ from ultralytics import YOLO
 import cv2
 
 # Carregar o modelo treinado
-model = YOLO('runs/detect/train11/weights/best.pt')  # Certifique-se de que o caminho está correto
+model = YOLO('runs/detect/train24/weights/best.pt')  # Certifique-se de que o caminho está correto
 
 # Abrir a webcam
 cap = cv2.VideoCapture(0)

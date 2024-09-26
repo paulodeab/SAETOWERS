@@ -15,7 +15,7 @@ def fix_labels(directory):
             new_lines = []
             for line in lines:
                 if line.startswith('16'):
-                    new_lines.append(line.replace('15', '0', 1))  # Substituir apenas o class_id
+                    new_lines.append(line.replace('16', '0', 1))  # Substituir apenas o class_id
                 else:
                     new_lines.append(line)
 
