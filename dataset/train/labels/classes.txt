@@ -1,16 +1,16 @@
-dog
-person
-cat
-tv
-car
-meatballs
-marinara sauce
-tomato soup
-chicken noodle soup
-french onion soup
-chicken breast
-ribs
-pulled pork
-hamburger
-cavity
-hand
+0
+0
+0
+0
+0
+0
+0 sauce
+0 soup
+0 noodle soup
+0 onion soup
+0 breast
+0
+0 pork
+0
+0
+0

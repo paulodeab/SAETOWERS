@@ -9,3 +9,9 @@ MODBUS_CONFIG = {
 REGISTER = {
     "signal" : 0
 }
+
+
+SOUND = {
+
+    "sound" : "src/sound/danger2.wav"
+}

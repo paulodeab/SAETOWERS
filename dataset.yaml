@@ -1,0 +1,4 @@
+train: D:/GitHub/SAETOWERS - COPIA/dataset/train/images
+val: D:/GitHub/SAETOWERS - COPIA/dataset/val/images
+nc: 1  # Número de classes (somente 1 classe: "hand")
+names: ['hand']  # Nome da classe
