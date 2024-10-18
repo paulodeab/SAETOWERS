@@ -13,5 +13,13 @@ REGISTER = {
 
 SOUND = {
 
-    "sound" : "src/sound/danger2.wav"
+    "sound" : "src/sound/danger3.mp3"
+}
+
+
+AI = {
+
+    # Carregar o modelo treinado do YOLO
+    "model" : "runs/detect/train28/weights/best.pt"
+
 }

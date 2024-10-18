@@ -1,11 +1,17 @@
 from src.service.signal import Signal
-
+import serial
+import time
 
 class LightSignal(Signal):
 
+    def __init__(self):
+        self._arduino = serial.Serial('COM10', 9600, timeout=1)
+        time.sleep(2)
 
     def stopSignal(self):
-        pass
+        command: str = '0'
+        self._arduino.write(command.encode())
 
     def startSignal(self):
-        pass
+        command: str = '1'
+        self._arduino.write(command.encode())
