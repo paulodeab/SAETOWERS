@@ -10,8 +10,10 @@ class LightSignal(Signal):
 
     def stopSignal(self):
         command: str = '0'
+        time.sleep(2)
         self._arduino.write(command.encode())
 
     def startSignal(self):
         command: str = '1'
+        time.sleep(1)
         self._arduino.write(command.encode())

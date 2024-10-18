@@ -1,3 +1,4 @@
+import threading
 from ultralytics import YOLO
 import cv2
 import mediapipe as mp
@@ -6,7 +7,6 @@ import numpy as np
 from src.service.lightsignal import LightSignal
 from src.service.soundsignal import SoundSignal
 from src.config.config import AI
-
 
 class HandRecognition:
 
@@ -34,11 +34,14 @@ class HandRecognition:
         # Definir as coordenadas do retângulo de segurança
         self.frame_width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.frame_height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        self.rect_width, self.rect_height = 100, 600
+        self.rect_width, self.rect_height = 100, 200
         self.rect_x1 = (self.frame_width - self.rect_width) // 2
         self.rect_y1 = (self.frame_height - self.rect_height) // 2
         self.rect_x2 = self.rect_x1 + self.rect_width
         self.rect_y2 = self.rect_y1 + self.rect_height
+
+        # Inicializar o sinal de luz
+        self.light_signal = LightSignal()
 
     def _draw_safety_rectangle(self, frame, area_violated):
         color = (0, 255, 0) if not area_violated else (0, 0, 255)
@@ -56,11 +59,7 @@ class HandRecognition:
         blurred = cv2.GaussianBlur(gray, (15, 15), 0)
         _, thresh = cv2.threshold(blurred, 50, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        l = LightSignal()
-        s = SoundSignal()
-
-        l.stopSignal()
-
+        
         area_violated = False
         for contour in contours:
             if cv2.contourArea(contour) > 500:
@@ -71,9 +70,10 @@ class HandRecognition:
                 x, y, w, h = cv2.boundingRect(contour)
                 if (x < self.rect_x2 and x + w > self.rect_x1 and y < self.rect_y2 and y + h > self.rect_y1):
                     area_violated = True
-                   # s.startSignal()
-                   # l.startSignal()
 
+                    # Executar a lógica de sinalização em uma thread separada
+                    threading.Thread(target=self._trigger_signals).start()
+                threading.Thread(target=self.light_signal.stopSignal).start()
 
         cv2.putText(frame, f'Conf: {confidence:.2f}',
                     (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
@@ -86,6 +86,12 @@ class HandRecognition:
                                             hand_landmarks,
                                             self.mp_hands.HAND_CONNECTIONS)
         return area_violated
+
+    def _trigger_signals(self):
+        # Chamar o sinal de luz e som de forma independente
+        s = SoundSignal()
+        s.startSignal()
+        self.light_signal.startSignal()
 
     def run(self):
         while self.cap.isOpened():
